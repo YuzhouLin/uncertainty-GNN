@@ -5,8 +5,8 @@ from scipy.special import loggamma, digamma
 from utils import load_data_threshold, load_data_ood
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import average_precision_score
-
-
+    
+    
 def vacuity_uncertainty(Baye_result):
     # Vacuity uncertainty
     mean = np.mean(Baye_result, axis=0)
@@ -44,7 +44,7 @@ def dissonance_uncertainty(Baye_result):
                     bj = belief[k][j]
                     term_Bal += bj * Bal(bi, bj)
                     term_bj += bj
-            dis_ki = bi * term_Bal / term_bj
+            dis_ki = bi * term_Bal / term_bj if term_bj!=0 else 0
             dis_un[k] += dis_ki
 
     return dis_un
@@ -66,13 +66,13 @@ def dissonance_sgcn(mean):
                     bj = belief[k][j]
                     term_Bal += bj * Bal(bi, bj)
                     term_bj += bj
-            dis_ki = bi * term_Bal / term_bj
+            dis_ki = bi * term_Bal / term_bj if term_bj!=0 else 0
             dis_un[k] += dis_ki
 
     return dis_un
 
 def Bal(b_i, b_j):
-    result = 1 - np.abs(b_i - b_j) / (b_i + b_j)
+    result = 1 - np.abs(b_i - b_j) / (b_i + b_j)  if b_i*b_j !=0 else 0
     return result
 
 
